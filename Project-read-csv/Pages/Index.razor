@@ -1,9 +1,70 @@
 ﻿@page "/"
+@using Project_read_csv.Domain.Response;
+@using Project_read_csv.Services;
+@inject UploadCsvService uploadCsvService
 
-<PageTitle>Index</PageTitle>
+<PageTitle>Paulo Vincius</PageTitle>
 
-<h1>Importação de Dados!</h1>
+<h1> Produtos CSV </h1>
 
-Em algum lugar .
+<p>This component demonstrates fetching data from a service.</p>
 
-<SurveyPrompt Title="How is Blazor working for you?" />
+<InputFile OnChange="@LoadFiles" accept=".csv" typeof=".csv" />
+
+<h2>@Message</h2>
+
+@if (uploadCsv == null )
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Tipocodigo</th>
+                <th>Descricao</th>
+                <th>Estoque</th>
+                <th>Precovenda</th>
+                <th>Precocusto</th>
+                <th>Datahoracadastro</th>
+                <th>Valor Total estoque</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var file in uploadCsv)
+            {
+                <tr>
+                    <td>@file.UploadCsv.Id</td>
+                    <td>@file.UploadCsv.Tipocodigo</td>
+                    <td>@file.UploadCsv.Descricao</td>
+                    <td>@file.UploadCsv.Estoque</td>
+                    <td>@file.UploadCsv.Precovenda</td>
+                    <td>@file.UploadCsv.Precocusto</td>
+                    <td>@file.UploadCsv.Datahoracadastro</td>
+                    <td>@file.ValorTotal</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<UploadCsvResponse> uploadCsv = new List<UploadCsvResponse>();
+
+    private string Message = "";
+
+    private async Task LoadFiles(InputFileChangeEventArgs filecsv)
+    {
+        if (filecsv.File.ContentType == "text/csv")
+        {
+            uploadCsv = await uploadCsvService.GetCsvAsync(filecsv);
+            Message = "";
+        }
+        else
+        {
+            Message = "Tipo de arquivo não suportado";
+        }
+    }
+}

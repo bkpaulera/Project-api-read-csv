@@ -6,7 +6,6 @@ namespace Project_read_csv.Domain.Models
 {
     public class UploadCsv
     {
-        public UploadCsv() { }
         //id;tipocodigo;descricao;estoque;precovenda;precocusto;datahoracadastro
         public UploadCsv(int id, int tipocodigo, string descricao, decimal estoque,
             decimal precovenda, decimal precocusto, string datahoracadastro)
