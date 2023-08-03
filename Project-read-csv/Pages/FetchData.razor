@@ -1,6 +1,9 @@
 ﻿@page "/fetchdata"
 @using Project_read_csv.Data
+@using Project_read_csv.Domain.Models;
+@using Project_read_csv.Services;
 @inject WeatherForecastService ForecastService
+@inject UploadCsvService uploadCsvService
 
 <PageTitle>Weather forecast</PageTitle>
 
@@ -8,7 +11,12 @@
 
 <p>This component demonstrates fetching data from a service.</p>
 
-@if (forecasts == null)
+<h1>"text/csv"</h1>
+
+<InputFile OnChange="@LoadFiles" accept=".csv" typeof=".csv" />
+<h1>@Message</h1>
+
+@if (uploadCsv == null)
 {
     <p><em>Loading...</em></p>
 }
@@ -17,20 +25,26 @@ else
     <table class="table">
         <thead>
             <tr>
-                <th>Date</th>
-                <th>Temp. (C)</th>
-                <th>Temp. (F)</th>
-                <th>Summary</th>
+                <th>ID</th>
+                <th>Tipocodigo</th>
+                <th>Descricao</th>
+                <th>Estoque</th>
+                <th>Precovenda</th>
+                <th>Precocusto</th>
+                <th>Datahoracadastro</th
             </tr>
         </thead>
         <tbody>
-            @foreach (var forecast in forecasts)
+            @foreach (var file in uploadCsv)
             {
                 <tr>
-                    <td>@forecast.Date.ToShortDateString()</td>
-                    <td>@forecast.TemperatureC</td>
-                    <td>@forecast.TemperatureF</td>
-                    <td>@forecast.Summary</td>
+                    <td>@file.Id</td>
+                    <td>@file.Tipocodigo</td>
+                    <td>@file.Descricao</td>
+                    <td>@file.Estoque</td>
+                    <td>@file.Precovenda</td>
+                    <td>@file.Precocusto</td>
+                    <td>@file.Datahoracadastro</td>
                 </tr>
             }
         </tbody>
@@ -40,8 +54,25 @@ else
 @code {
     private WeatherForecast[]? forecasts;
 
+    private List<UploadCsv> uploadCsv;
+
+    private string Message; 
+
     protected override async Task OnInitializedAsync()
     {
         forecasts = await ForecastService.GetForecastAsync(DateOnly.FromDateTime(DateTime.Now));
+    }
+
+    private async Task LoadFiles(InputFileChangeEventArgs filecsv)
+    {
+        if (filecsv.File.ContentType == "text/csv")
+        {
+            uploadCsv = await uploadCsvService.GetCsvAsync(filecsv);
+            Message = "O arquivo importado é um .csv";
+        }
+        else
+        {
+            Message = "Tipo de arquivo não suportado";
+        }
     }
 }
