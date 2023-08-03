@@ -12,6 +12,7 @@ namespace Project_read_csv.Domain.Response
         public UploadCsv UploadCsv { get; set; }
         public decimal ValorTotal { get; set;}
 
+        
         public static implicit operator UploadCsvResponse(UploadCsv file)
         {
             return new UploadCsvResponse(

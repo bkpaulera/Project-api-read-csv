@@ -54,13 +54,12 @@ else
     private List<UploadCsvResponse> uploadCsv = new List<UploadCsvResponse>();
 
     private string Message = "";
-
+    //
     private async Task LoadFiles(InputFileChangeEventArgs filecsv)
     {
         if (filecsv.File.ContentType == "text/csv")
         {
             uploadCsv = await uploadCsvService.GetCsvAsync(filecsv);
-            Message = "";
         }
         else
         {

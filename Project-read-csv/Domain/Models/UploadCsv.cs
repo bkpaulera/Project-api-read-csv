@@ -6,7 +6,7 @@ namespace Project_read_csv.Domain.Models
 {
     public class UploadCsv
     {
-        //id;tipocodigo;descricao;estoque;precovenda;precocusto;datahoracadastro
+        //Model para a criação do objeto 
         public UploadCsv(int id, int tipocodigo, string descricao, decimal estoque,
             decimal precovenda, decimal precocusto, string datahoracadastro)
         {
@@ -27,10 +27,8 @@ namespace Project_read_csv.Domain.Models
         public decimal Precocusto { get; set; }
         public string Datahoracadastro { get; set; }
 
-        public static implicit operator string(UploadCsv uploadCsv) =>
-            $"{uploadCsv.Id},{uploadCsv.Tipocodigo},{uploadCsv.Descricao},{uploadCsv.Estoque}," +
-            $"{uploadCsv.Precovenda},{uploadCsv.Precocusto},{uploadCsv.Datahoracadastro}";
-
+        
+        //Metodo implicito para a conversão do csv
         public static implicit operator UploadCsv(string line)
         {
             var data = line.Split(";");
